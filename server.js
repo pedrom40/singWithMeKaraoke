@@ -2,6 +2,7 @@
 const express = require('express');
 const app = express();
 
+
 // setup middleware
 app.use(express.static('public'));
 
