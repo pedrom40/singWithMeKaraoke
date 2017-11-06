@@ -1,0 +1,26 @@
+{
+  "name": "singwithmekaraoke",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pedrom40/singWithMeKaraoke.git"
+  },
+  "author": "Pedro Morin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pedrom40/singWithMeKaraoke/issues"
+  },
+  "homepage": "https://github.com/pedrom40/singWithMeKaraoke#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
