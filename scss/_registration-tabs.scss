@@ -1,0 +1,28 @@
+.registration-forms {
+  margin-top:-57px;
+
+  .nav-tabs {
+    border:none;
+  }
+
+  .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+    color:#fff;
+    letter-spacing: 1px;
+    background-color:#000;
+    border:none;
+    opacity:1;
+  }
+  .nav-tabs > li > a {
+    font-weight:bold;
+    font-size:26px;
+    border-radius:0;
+    color:#fff;
+    background-color:#000;
+    border:none;
+    opacity:0.5;
+  }
+
+  .tab-content {
+    background:black;
+  }
+}

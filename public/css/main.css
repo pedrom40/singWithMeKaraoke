@@ -1,0 +1,54 @@
+body {
+  font-family: "Raleway", sans-serif; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Berkshire Swash", cursive; }
+
+.branding {
+  width: 100%;
+  height: 667px;
+  background-image: url("/images/main-bg.jpg");
+  background-size: cover;
+  background-repeat: no-repeat; }
+  .branding .navbar, .branding .navbar-default {
+    background-color: transparent;
+    border: none; }
+    .branding .navbar .navbar-toggle, .branding .navbar-default .navbar-toggle {
+      float: none;
+      padding: 15px 20px;
+      border: none; }
+      .branding .navbar .navbar-toggle .icon-bar, .branding .navbar-default .navbar-toggle .icon-bar {
+        box-shadow: 0 0 10px #333;
+        background-color: white; }
+    .branding .navbar .navbar-brand, .branding .navbar-default .navbar-brand {
+      float: right;
+      padding: 18px 20px;
+      font-family: "Raleway", sans-serif;
+      font-weight: bold;
+      font-size: 20px;
+      color: white;
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px #333; }
+
+.registration-forms {
+  margin-top: -57px; }
+  .registration-forms .nav-tabs {
+    border: none; }
+  .registration-forms .nav-tabs > li.active > a, .registration-forms .nav-tabs > li.active > a:focus, .registration-forms .nav-tabs > li.active > a:hover {
+    color: #fff;
+    letter-spacing: 1px;
+    background-color: #000;
+    border: none;
+    opacity: 1; }
+  .registration-forms .nav-tabs > li > a {
+    font-weight: bold;
+    font-size: 26px;
+    border-radius: 0;
+    color: #fff;
+    background-color: #000;
+    border: none;
+    opacity: 0.5; }
+  .registration-forms .tab-content {
+    background: black; }
+
+/*# sourceMappingURL=main.css.map */
