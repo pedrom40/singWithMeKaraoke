@@ -31,6 +31,9 @@ body {
 .black-section {
   background: black; }
 
+.new-class {
+  color: white; }
+
 .branding {
   width: 100%;
   height: 667px;
