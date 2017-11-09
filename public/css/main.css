@@ -1,8 +1,35 @@
 body {
-  font-family: "Raleway", sans-serif; }
+  font-family: "Raleway", sans-serif;
+  letter-spacing: 1px; }
+  body h1 {
+    font-family: "Berkshire Swash", cursive;
+    font-weight: bold; }
+  body h2, body h3, body h4, body h5, body h6 {
+    font-family: "Raleway", sans-serif;
+    font-weight: bold; }
+  body .form-control {
+    border-radius: 0; }
+  body .btn-default {
+    color: white;
+    font-weight: bold;
+    background: #1485cc; }
+  body .btn {
+    border: none;
+    border-radius: 0; }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: "Berkshire Swash", cursive; }
+.blue-section, .grey-section, .black-section {
+  padding: 20px; }
+  .blue-section img, .grey-section img, .black-section img {
+    padding: 15px 0; }
+
+.blue-section {
+  background: #1485cc; }
+
+.grey-section {
+  background: #333; }
+
+.black-section {
+  background: black; }
 
 .branding {
   width: 100%;
@@ -49,6 +76,10 @@ h1, h2, h3, h4, h5, h6 {
     border: none;
     opacity: 0.5; }
   .registration-forms .tab-content {
+    padding-top: 20px;
+    color: white;
     background: black; }
+    .registration-forms .tab-content .login-msg {
+      text-align: center; }
 
 /*# sourceMappingURL=main.css.map */

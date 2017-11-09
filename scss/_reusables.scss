@@ -1,0 +1,16 @@
+.blue-section, .grey-section, .black-section {
+  padding:20px;
+
+  img {
+    padding:15px 0;
+  }
+}
+.blue-section {
+  background:$primaryColor;
+}
+.grey-section {
+  background:$secondaryColor;
+}
+.black-section {
+  background:black;
+}

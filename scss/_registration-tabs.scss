@@ -23,6 +23,12 @@
   }
 
   .tab-content {
+    padding-top:20px;
+    color:white;
     background:black;
+
+    .login-msg {
+      text-align:center;
+    }
   }
 }

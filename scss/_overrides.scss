@@ -1,7 +1,28 @@
 body {
   font-family:$secondaryFont;
-}
+  letter-spacing:1px;
 
-h1, h2, h3, h4, h5, h6 {
-  font-family:$primaryFont;
+  // typography overrides
+  h1 {
+    font-family:$primaryFont;
+    font-weight:bold;
+  }
+  h2, h3, h4, h5, h6 {
+    font-family:$secondaryFont;
+    font-weight:bold;
+  }
+
+  // form overrides
+  .form-control {
+    border-radius:0;
+  }
+  .btn-default {
+    color:white;
+    font-weight:bold;
+    background: $primaryColor;
+  }
+  .btn {
+    border:none;
+    border-radius:0;
+  }
 }
