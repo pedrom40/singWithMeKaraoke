@@ -57,6 +57,46 @@ body {
       letter-spacing: 1px;
       text-shadow: 0 0 10px #333; }
 
+@media only screen and (min-width: 768px) {
+  .branding {
+    height: 265px;
+    background-image: url("/images/main-bg-large.jpg");
+    background-size: contain; }
+    .branding .navbar-header {
+      float: none; }
+      .branding .navbar-header .navbar-toggle {
+        display: inline-block;
+        padding: 6px 15px; }
+    .branding .navbar .navbar-brand, .branding .navbar-default .navbar-brand {
+      padding: 12px 14px;
+      font-size: 16px; }
+    .branding .container-fluid > .navbar-collapse, .branding .container-fluid > .navbar-header, .branding .container > .navbar-collapse, .branding .container > .navbar-header {
+      margin-right: -15px;
+      margin-left: -15px; }
+    .branding .navbar-collapse.collapse {
+      display: none !important; } }
+@media only screen and (min-width: 1024px) {
+  .branding {
+    height: 352px; }
+    .branding .navbar-header .navbar-toggle {
+      padding: 13px 20px; }
+    .branding .navbar .navbar-brand, .branding .navbar-default .navbar-brand {
+      padding: 17px 20px;
+      font-size: 20px; }
+
+  .registration-forms h2 {
+    margin-bottom: 35px;
+    font-size: 40px; }
+  .registration-forms ul {
+    font-size: 22px; }
+  .registration-forms form {
+    margin-top: 25px; }
+  .registration-forms h3 {
+    font-size: 34px;
+    margin-bottom: 15px; }
+  .registration-forms p {
+    font-size: 18px;
+    line-height: 28px; } }
 .registration-forms {
   margin-top: -57px; }
   .registration-forms .nav-tabs {
