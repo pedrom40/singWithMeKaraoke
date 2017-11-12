@@ -2,29 +2,12 @@ const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 
 const UserSchema = mongoose.Schema ({
-  type: {
-    type: String,
-    default: 'Singer',
-    required: true
-  },
-  firstName: {
-    type: String
-  },
-  lastName: {
-    type: String
-  },
-  userName: {
-    type: String,
-    unique: true
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  phone: {
-    type: String
-  }
+  type: {type: String, default: 'Singer', required: true},
+  firstName: {type: String},
+  lastName: {type: String},
+  userName: {type: String, unique: true},
+  email: {type: String, required: true, unique: true},
+  phone: {type: String}
 });
 
 // handles all things password related
@@ -37,8 +20,7 @@ UserSchema.methods.apiRepr = function() {
     type: this.type || '',
     userName: this.userName || '',
     firstName: this.firstName || '',
-    lastName: this.lastName || '',
-    email: this.email || ''
+    lastName: this.lastName || ''
   };
 };
 
