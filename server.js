@@ -6,6 +6,9 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const passport = require('passport');
 
+// setup routers
+const {router: usersRouter} = require('./users/router');
+
 // app setup
 mongoose.Promise = global.Promise;
 const {PORT, DATABASE_URL} = require('./config');
@@ -31,6 +34,8 @@ app.use(passport.initialize());
 
 // setup middleware
 app.use(express.static('public'));
+
+app.use('/api/users/', usersRouter);
 
 
 // root domain
