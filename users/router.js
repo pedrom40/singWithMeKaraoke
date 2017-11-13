@@ -9,7 +9,7 @@ const jsonParser = bodyParser.json();
 
 // CREATE: register a new user
 router.post('/', jsonParser, (req, res) => {
-  const requiredFields = ['userName', 'email', 'password'];
+  const requiredFields = ['type', 'userName', 'email', 'password'];
   const missingField = requiredFields.find(field => !(field in req.body));
 
   if (missingField) {
@@ -37,6 +37,12 @@ router.post('/', jsonParser, (req, res) => {
   }
 
   const sizedFields = {
+    userName: {
+      min: 1
+    },
+    email: {
+      min: 5
+    },
     password: {
       min: 8,
       max: 72
@@ -64,7 +70,8 @@ router.post('/', jsonParser, (req, res) => {
     });
   }
 
-  let {userName, email, password} = req.body;
+  let {type, userName, email, password} = req.body;
+  type = type.trim();
   userName = userName.trim();
   email = email.trim();
 
@@ -82,8 +89,10 @@ router.post('/', jsonParser, (req, res) => {
       }
 
       return User.create({
+        type,
         userName,
-        email
+        email,
+        password
       });
     })
     .then(user => {
