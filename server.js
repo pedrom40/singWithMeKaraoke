@@ -6,6 +6,10 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const passport = require('passport');
 
+// setup routers
+const {router: usersRouter} = require('./users/router');
+const {router: authRouter, basicStrategy, jwtStrategy} = require('./auth');
+
 // app setup
 mongoose.Promise = global.Promise;
 const {PORT, DATABASE_URL} = require('./config');
@@ -26,16 +30,24 @@ app.use(function(req, res, next) {
 });
 
 app.use(passport.initialize());
-//passport.use(basicStrategy);
-//passport.use(jwtStrategy);
+passport.use(basicStrategy);
+passport.use(jwtStrategy);
 
 // setup middleware
 app.use(express.static('public'));
+
+app.use('/api/users/', usersRouter);
+app.use('/api/auth/', authRouter);
 
 
 // root domain
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
+});
+
+// A protected endpoint which needs a valid JWT to access it
+app.get('/api/protected', passport.authenticate('jwt', {session: false}), (req, res) => {
+  return res.json({data: 'rosebud'});
 });
 
 // catch all method
@@ -47,9 +59,9 @@ app.use('*', (req, res) => {
 // setup server
 let server;
 
-function runServer() {
+function runServer(databaseUrl=DATABASE_URL, port=PORT) {
   return new Promise((resolve, reject) => {
-    mongoose.connect(DATABASE_URL, err => {
+    mongoose.connect(databaseUrl, err => {
       if (err) {
         return reject(err);
       }
