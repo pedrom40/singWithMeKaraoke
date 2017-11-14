@@ -217,4 +217,46 @@ describe('Users API resource', () => {
 
   });
 
+  // test login
+  describe('AUTH test', () => {
+
+    it('should return valid JWT', () => {
+
+      // init new record
+      const newRecord = generateData();
+
+      // create new record
+      return chai.request(app)
+        .post('/api/users')
+        .send(newRecord)
+        .then( resp => {
+
+          // login with new record using basic auth
+          return chai.request(app)
+            .post('/api/auth/login')
+            .auth(newRecord.userName, newRecord.password)
+            .then( res => {
+
+              // check for authToken
+              expect(res.body).to.have.property('authToken');
+
+              // use authToken to access protected area
+              return chai.request(app)
+                .get('/api/protected')
+                .set('Authorization', `Bearer ${res.body.authToken}`)
+                .then( result => {
+
+                  expect(result.body).to.have.property('data');
+                  expect(result.body.data).to.equal('rosebud');
+
+                });
+
+            });
+
+        });
+
+    });
+
+  });
+
 });
