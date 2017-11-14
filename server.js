@@ -52,7 +52,7 @@ app.get('/api/protected', passport.authenticate('jwt', {session: false}), (req, 
 
 // catch all method
 app.use('*', (req, res) => {
-  return res.status(404).json({message: 'Not Found'});
+  return res.status(404).json({message: 'Path Not Found'});
 });
 
 
