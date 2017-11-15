@@ -9,6 +9,7 @@ const passport = require('passport');
 // setup routers
 const {router: usersRouter} = require('./users/router');
 const {router: authRouter, basicStrategy, jwtStrategy} = require('./auth');
+const {router: singersRouter} = require('./singers/router');
 
 // app setup
 mongoose.Promise = global.Promise;
@@ -38,12 +39,19 @@ app.use(express.static('public'));
 
 app.use('/api/users/', usersRouter);
 app.use('/api/auth/', authRouter);
+app.use('/singers/', singersRouter);
 
 
 // root domain
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
+
+// user login path
+app.get('/login', (req, res) => {
+  res.sendFile(__dirname + '/public/login.html');
+});
+
 
 // A protected endpoint which needs a valid JWT to access it
 app.get('/api/protected', passport.authenticate('jwt', {session: false}), (req, res) => {

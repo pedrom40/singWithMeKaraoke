@@ -79,38 +79,49 @@
                 <div class="col-sm-6 col-md-6 col-lg-6">
                   <h2>Register as a Singer</h2>
                   <ul>
-                    <li>Search show host's Song Banks</li>
-                    <li>Create your own song lists</li>
-                    <li>See shows in your area</li>
-                    <li>Request songs from Hosts</li>
-                    <li>Easily submit songs at a show</li>
+                    <li>Search host's Song Banks</li>
+                    <li>Create your own Song Lists</li>
+                    <li>See Shows in your area</li>
+                    <li>Request Songs from Hosts</li>
                   </ul>
-                  <form class="registration-form">
+                  <form class="js-registration-form">
+                    <div class="row">
+                      <div class="col-sm-12 col-md-12">
+                        <div class="form-group">
+                          <label for="singerUserName">Stage Name:</label>
+                          <input type="text" id="singerUserName" placeholder="JoeSingsTheBlues" required class="form-control js-user-name">
+                          <span class="help-block js-user-name-help-block"></span>
+                        </div>
+                      </div>
+                    </div>
                     <div class="row">
                       <div class="col-sm-6 col-md-6">
                         <div class="form-group">
-                          <label for="email">Email:</label>
-                          <input type="email" id="email" placeholder="singer@heart.com" class="form-control">
+                          <label for="singerEmail">Email:</label>
+                          <input type="email" id="singerEmail" placeholder="singer@heart.com" required class="form-control js-user-email">
+                          <span class="help-block js-user-email-help-block"></span>
                         </div>
                       </div>
                       <div class="col-sm-6 col-md-6">
                         <div class="form-group">
                           <label for="singerPassword">Password:</label>
-                          <input type="password" id="pwd" placeholder="******" class="form-control">
+                          <input type="password" id="singerPassword" placeholder="******" required class="form-control js-user-password">
+                          <span class="help-block js-user-password-help-block"></span>
                         </div>
                       </div>
                       <div class="col-sm-12 col-md-12">
                         <div class="form-group">
                           <input type="submit" value="Sign Up" class="btn btn-default btn-block">
+                          <span class="help-block js-submit-help-block"></span>
                         </div>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-md-12 login-msg">
-                        <p>Already a Singer? <a href="#">Login Here</a></p>
+                        <p>Already a Singer? <a href="/login">Login Here</a></p>
                       </div>
                     </div>
-                    <input type="hidden" id="userType" value="Singer">
+                    <input type="hidden" id="singerUserType" class="js-user-type" value="Singer">
                   </form>
                 </div>
               </div>
@@ -173,38 +184,49 @@
                 <div class="col-sm-6 col-md-6 col-lg-6">
                   <h2>Register as a Host</h2>
                   <ul>
-                    <li>Post your shows online</li>
+                    <li>Post your Shows online</li>
                     <li>Upload your Song Bank</li>
                     <li>Access to our Show Manager App</li>
                     <li>Create a Host Page on our site</li>
-                    <li>Interact with Singers</li>
                   </ul>
                   <form class="registration-form">
                     <div class="row">
+                      <div class="col-sm-12 col-md-12">
+                        <div class="form-group">
+                          <label for="hostUserName">Stage Name:</label>
+                          <input type="text" id="hostUserName" placeholder="RockstarKaraoke" required class="form-control js-user-name">
+                          <span class="help-block js-user-name-help-block"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
                       <div class="col-sm-6 col-md-6">
                         <div class="form-group">
-                          <label for="email">Email:</label>
-                          <input type="email" id="email" placeholder="singer@heart.com" class="form-control">
+                          <label for="hostEmail">Email:</label>
+                          <input type="email" id="hostEmail" placeholder="singer@heart.com" class="form-control js-user-email">
+                          <span class="help-block js-user-email-help-block"></span>
                         </div>
                       </div>
                       <div class="col-sm-6 col-md-6">
                         <div class="form-group">
-                          <label for="singerPassword">Password:</label>
-                          <input type="password" id="pwd" placeholder="******" class="form-control">
+                          <label for="hostPassword">Password:</label>
+                          <input type="password" id="hostPassword" placeholder="******" class="form-control js-user-password">
+                          <span class="help-block js-user-password-help-block"></span>
                         </div>
                       </div>
                       <div class="col-sm-12 col-md-12">
                         <div class="form-group">
                           <input type="submit" value="Sign Up" class="btn btn-default btn-block">
+                          <span class="help-block js-submit-help-block"></span>
                         </div>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-md-12 login-msg">
-                        <p>Already a Host? <a href="#">Login Here</a></p>
+                        <p>Already a Host? <a href="/login">Login Here</a></p>
                       </div>
                     </div>
-                    <input type="hidden" id="userType" value="Host">
+                    <input type="hidden" id="hostUserType" value="Host" class="js-user-type">
                   </form>
                 </div>
               </div>
@@ -265,5 +287,9 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="/js/jquery.cookie.js"></script>
+    <script src="/js/users.js"></script>
+    <script src="/js/shared.js"></script>
+
   </body>
 </html>

@@ -36,40 +36,6 @@ router.post('/', jsonParser, (req, res) => {
     });
   }
 
-  const sizedFields = {
-    userName: {
-      min: 1
-    },
-    email: {
-      min: 5
-    },
-    password: {
-      min: 8,
-      max: 72
-    }
-  };
-  const tooSmallField = Object.keys(sizedFields).find(
-    field =>
-      'min' in sizedFields[field] &&
-      req.body[field].trim().length < sizedFields[field].min
-  );
-  const tooLargeField = Object.keys(sizedFields).find(
-    field =>
-      'max' in sizedFields[field] &&
-      req.body[field].trim().length > sizedFields[field].max
-  );
-
-  if (tooSmallField || tooLargeField) {
-    return res.status(422).json({
-      code: 422,
-      reason: 'ValidationError',
-      message: tooSmallField
-        ? `Must be at least ${sizedFields[tooSmallField].min} characters long`
-        : `Must be at most ${sizedFields[tooLargeField].max} characters long`,
-      location: tooSmallField || tooLargeField
-    });
-  }
-
   let {type, userName, email, password} = req.body;
   type = type.trim();
   userName = userName.trim();
@@ -100,9 +66,6 @@ router.post('/', jsonParser, (req, res) => {
     })
     .catch(err => {
 
-      // show me the error
-      console.log(err);
-
       // Forward validation errors to client, otherwise give a 500 error, something unexpected happened
       if (err.reason === 'ValidationError') {
         return res.status(err.code).json(err);
@@ -124,6 +87,11 @@ router.get('/', (req, res) => {
     .catch(err => {
       res.status(500).json({message: 'Internal server error'})
     });
+});
+
+// check for active session
+router.get('/session', (req, res) => {
+  res.json({validated: false});
 });
 
 // UPDATE
@@ -167,5 +135,31 @@ router.delete('/:id', (req, res) => {
     .catch(err => res.status(500).json({message: 'Internal server error'}));
 });
 
+
+// check for unique userName
+router.get('/userName/:userName', (req, res) => {
+
+  // lookup user by userName and return the count
+  return User
+          .find({userName: req.params.userName})
+          .count()
+          .then( count => {
+            res.json({totalUsers: count});
+          });
+
+});
+
+// check for unique userName
+router.get('/email/:email', (req, res) => {
+
+  // lookup user by userName and return the count
+  return User
+          .find({email: req.params.email})
+          .count()
+          .then( count => {
+            res.json({totalUsers: count});
+          });
+
+});
 
 module.exports = {router};
