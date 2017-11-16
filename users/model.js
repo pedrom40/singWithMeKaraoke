@@ -31,11 +31,6 @@ const UserSchema = mongoose.Schema ({
 UserSchema.plugin(require('mongoose-bcrypt'));
 UserSchema.plugin(require('mongoose-unique-validator'));
 
-// used for validating password when logging in
-UserSchema.methods.validatePassword = function(password) {
-  return bcrypt.compare(password, this.password);
-}
-
 // for sending user objects without sensitive data
 UserSchema.methods.apiRepr = function() {
   return {

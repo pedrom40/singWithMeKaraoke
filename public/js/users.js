@@ -1,3 +1,5 @@
+'use strict';
+
 function initUsers () {
 
   // check for valid jwt
@@ -330,7 +332,10 @@ function listenForSingerRegistrations () {
         .then( res => {
 
           // login singer
-          //loginSinger();
+          loginUser(userData.userName, userData.password)
+            .then ( loginResult => {
+              console.log(loginResult);
+            });
 
         })
         .fail( err => {
@@ -382,7 +387,10 @@ function listenForHostRegistrations () {
         .then( res => {
 
           // login host
-          //loginHost();
+          loginUser(userData.userName, userData.password)
+            .then ( loginResult => {
+              console.log(loginResult);
+            });
 
         })
         .fail( err => {
@@ -412,8 +420,35 @@ function listenForLogins () {
   $('.js-login-form').submit( event => {
     event.preventDefault();
 
-    console.log('login attempt');
+    loginUser($('#userName').val(), $('#userPassword').val())
+      .then ( loginResult => {
+        console.log(loginResult);
+      })
+      .fail( err => {
+        console.log(err);
+      });
+
   });
+
+}
+
+// login users
+function loginUser (userName, password) {
+
+  const qData = {
+    userName: userName,
+    password: password
+  }
+
+  const settings = {
+    type: 'POST',
+    url: '/api/auth/login',
+    dataType: 'json',
+    contentType: 'application/json',
+    data: JSON.stringify(qData)
+  }
+
+  return $.ajax(settings);
 
 }
 

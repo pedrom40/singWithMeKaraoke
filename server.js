@@ -18,6 +18,7 @@ const app = express();
 
 // Logging
 app.use(morgan('common'));
+app.use(bodyParser.json());
 
 // CORS
 app.use(function(req, res, next) {
