@@ -64,7 +64,7 @@ router.post('/', jsonParser, (req, res) => {
     .then(user => {
       return res.status(201).json(user.apiRepr());
     })
-    .catch(err => {
+    .catch(err => {console.log(err);
 
       // Forward validation errors to client, otherwise give a 500 error, something unexpected happened
       if (err.reason === 'ValidationError') {

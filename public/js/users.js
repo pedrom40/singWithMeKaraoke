@@ -19,7 +19,8 @@ function initUsers () {
       else {
 
         // for new users
-        listenForUserRegistrations();
+        listenForSingerRegistrations();
+        listenForHostRegistrations();
 
         // validate stage name on change
         validateStageName();
@@ -53,8 +54,8 @@ function checkForCurrentSession () {
 // watch for stage name "change" events, check entry
 function validateStageName () {
 
-  // on change, check user name
-  $('.js-user-name').change( event => {
+  // on singer change, check user name
+  $('.js-singer-userName').change( event => {
 
     // send to api
     $.get(`/api/users/userName/${event.target.value}`)
@@ -67,7 +68,7 @@ function validateStageName () {
             $(`#${event.target.id}`).closest('.form-group').addClass('has-error');
 
             // send reason
-            $('.js-user-name-help-block').html('This Stage Name is already in use, please try another.');
+            $('.js-singer-userName-help-block').html('This Stage Name is already in use, please try another.');
 
           }
 
@@ -78,7 +79,40 @@ function validateStageName () {
             $(`#${event.target.id}`).closest('.form-group').removeClass('has-error');
 
             // send reason
-            $('.js-user-name-help-block').html('');
+            $('.js-singer-userName-help-block').html('');
+
+          }
+
+        });
+
+  });
+
+  // on host change, check user name
+  $('.js-host-userName').change( event => {
+
+    // send to api
+    $.get(`/api/users/userName/${event.target.value}`)
+        .then( res => {
+
+          // if userName already taken
+          if (res.totalUsers > 0) {
+
+            // add error class to input
+            $(`#${event.target.id}`).closest('.form-group').addClass('has-error');
+
+            // send reason
+            $('.js-host-userName-help-block').html('This Stage Name is already in use, please try another.');
+
+          }
+
+          // if not
+          else {
+
+            // make sure error class is removed
+            $(`#${event.target.id}`).closest('.form-group').removeClass('has-error');
+
+            // send reason
+            $('.js-host-userName-help-block').html('');
 
           }
 
@@ -91,8 +125,8 @@ function validateStageName () {
 // watch for user email "change" events, check entry
 function validateUserEmail () {
 
-  // on change, check user name
-  $('.js-user-email').change( event => {
+  // on singer change, check user name
+  $('.js-singer-email').change( event => {
 
     // validate email format
     const validEmail = validateEmail($(`#${event.target.id}`).val());
@@ -104,7 +138,7 @@ function validateUserEmail () {
       $(`#${event.target.id}`).closest('.form-group').removeClass('has-error');
 
       // send reason
-      $('.js-user-email-help-block').html('');
+      $('.js-singer-email-help-block').html('');
 
       // send to api
       $.get(`/api/users/email/${event.target.value}`)
@@ -117,7 +151,7 @@ function validateUserEmail () {
             $(`#${event.target.id}`).closest('.form-group').addClass('has-error');
 
             // send reason
-            $('.js-user-email-help-block').html('This email is already in use, please try another.');
+            $('.js-singer-email-help-block').html('This email is already in use, please try another.');
 
           }
 
@@ -128,7 +162,7 @@ function validateUserEmail () {
             $(`#${event.target.id}`).closest('.form-group').removeClass('has-error');
 
             // send reason
-            $('.js-user-email-help-block').html('');
+            $('.js-singer-email-help-block').html('');
 
           }
 
@@ -143,7 +177,65 @@ function validateUserEmail () {
       $(`#${event.target.id}`).closest('.form-group').addClass('has-error');
 
       // send reason
-      $('.js-user-email-help-block').html('Check your email entry, it is not valid.');
+      $('.js-singer-email-help-block').html('Check your email entry, it is not valid.');
+
+    }
+
+  });
+
+  // on host change, check user name
+  $('.js-host-email').change( event => {
+
+    // validate email format
+    const validEmail = validateEmail($(`#${event.target.id}`).val());
+
+    // if valid
+    if (validEmail) {
+
+      // make sure error class is removed
+      $(`#${event.target.id}`).closest('.form-group').removeClass('has-error');
+
+      // send reason
+      $('.js-host-email-help-block').html('');
+
+      // send to api
+      $.get(`/api/users/email/${event.target.value}`)
+        .then( res => {
+
+          // if email already taken
+          if (res.totalUsers > 0) {
+
+            // add error class to input
+            $(`#${event.target.id}`).closest('.form-group').addClass('has-error');
+
+            // send reason
+            $('.js-host-email-help-block').html('This email is already in use, please try another.');
+
+          }
+
+          // if not
+          else {
+
+            // make sure error class is removed
+            $(`#${event.target.id}`).closest('.form-group').removeClass('has-error');
+
+            // send reason
+            $('.js-host-email-help-block').html('');
+
+          }
+
+        });
+
+    }
+
+    // if not
+    else {
+
+      // add error class to input
+      $(`#${event.target.id}`).closest('.form-group').addClass('has-error');
+
+      // send reason
+      $('.js-host-email-help-block').html('Check your email entry, it is not valid.');
 
     }
 
@@ -154,8 +246,8 @@ function validateUserEmail () {
 // watch for user password "change" events, check entry
 function validateUserPassword () {
 
-  // on change, check user name
-  $('.js-user-password').change( event => {
+  // on singer password change, check user name
+  $('.js-singer-password').change( event => {
 
     // if password not long enough
     if ($(`#${event.target.id}`).val().length < 6) {
@@ -164,7 +256,7 @@ function validateUserPassword () {
       $(`#${event.target.id}`).closest('.form-group').addClass('has-error');
 
       // send reason
-      $('.js-user-password-help-block').html('Your password must be at least 6 characters.');
+      $('.js-singer-password-help-block').html('Your password must be at least 6 characters.');
 
     }
 
@@ -175,17 +267,45 @@ function validateUserPassword () {
       $(`#${event.target.id}`).closest('.form-group').removeClass('has-error');
 
       // send reason
-      $('.js-user-password-help-block').html('');
+      $('.js-singer-password-help-block').html('');
 
     }
 
   });
+
+  // on host password change, check user name
+  $('.js-host-password').change( event => {
+
+    // if password not long enough
+    if ($(`#${event.target.id}`).val().length < 6) {
+
+      // add error class to input
+      $(`#${event.target.id}`).closest('.form-group').addClass('has-error');
+
+      // send reason
+      $('.js-host-password-help-block').html('Your password must be at least 6 characters.');
+
+    }
+
+    // if not
+    else {
+
+      // make sure error class is removed
+      $(`#${event.target.id}`).closest('.form-group').removeClass('has-error');
+
+      // send reason
+      $('.js-host-password-help-block').html('');
+
+    }
+
+  });
+
 }
 
-// listens for singer/host registration form submit event
-function listenForUserRegistrations () {
+// listens for singer registration form submit event
+function listenForSingerRegistrations () {
 
-  $('.js-registration-form').submit( event => {
+  $('.js-singer-registration-form').submit( event => {
     event.preventDefault();
 
     // if validation errors
@@ -195,22 +315,22 @@ function listenForUserRegistrations () {
       $(`input[type=submit]`).closest('.form-group').removeClass('has-error');
 
       // send reason
-      $('.js-submit-help-block').html('');
+      $('.js-singer-submit-help-block').html('');
 
       // gather user data from form inputs
       const userData = {
-        type: $('.js-user-type').val(),
-        userName: $('.js-user-name').val(),
-        email: $('.js-user-email').val(),
-        password: $('.js-user-password').val()
+        type: 'Singer',
+        userName: $('.js-singer-userName').val(),
+        email: $('.js-singer-email').val(),
+        password: $('.js-singer-password').val()
       }
 
       // trigger create new user event
       createNewUser(userData)
-        .then( res => {console.log(res);
+        .then( res => {
 
-          // send to singer's home page
-          //window.location.assign(`/singers/${res.userName}`);
+          // login singer
+          //loginSinger();
 
         })
         .fail( err => {
@@ -226,7 +346,59 @@ function listenForUserRegistrations () {
       $(`input[type=submit]`).closest('.form-group').addClass('has-error');
 
       // send reason
-      $('.js-submit-help-block').html('Fix above errors before submitting this form.');
+      $('.js-singer-submit-help-block').html('Fix above errors before submitting this form.');
+
+    }
+
+  });
+
+}
+
+// listens for host registration form submit event
+function listenForHostRegistrations () {
+
+  $('.js-host-registration-form').submit( event => {
+    event.preventDefault();
+
+    // if validation errors
+    if ($('.has-error').length === 0) {
+
+      // add error class to input
+      $(`input[type=submit]`).closest('.form-group').removeClass('has-error');
+
+      // send reason
+      $('.js-host-submit-help-block').html('');
+
+      // gather user data from form inputs
+      const userData = {
+        type: 'Host',
+        userName: $('.js-host-userName').val(),
+        email: $('.js-host-email').val(),
+        password: $('.js-host-password').val()
+      }
+
+      // trigger create new user event
+      createNewUser(userData)
+        .then( res => {
+
+          // login host
+          //loginHost();
+
+        })
+        .fail( err => {
+          console.log(err);
+        });
+
+    }
+
+    // if not
+    else {
+
+      // add error class to input
+      $(`input[type=submit]`).closest('.form-group').addClass('has-error');
+
+      // send reason
+      $('.js-host-submit-help-block').html('Fix above errors before submitting this form.');
 
     }
 
