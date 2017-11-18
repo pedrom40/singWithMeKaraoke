@@ -340,7 +340,7 @@ function listenForSingerRegistrations () {
   $('.js-singer-registration-form').submit( event => {
     event.preventDefault();
 
-    // if validation errors
+    // if no validation errors
     if ($('.has-error').length === 0) {
 
       // add error class to input
@@ -364,7 +364,7 @@ function listenForSingerRegistrations () {
           // login singer
           loginUser(userData.userName, userData.password)
             .then ( loginResult => {
-              console.log(loginResult);
+              registerAndRedirectUser(loginResult);
             });
 
         })
@@ -374,7 +374,7 @@ function listenForSingerRegistrations () {
 
     }
 
-    // if not
+    // if errors
     else {
 
       // add error class to input
@@ -419,7 +419,9 @@ function listenForHostRegistrations () {
           // login host
           loginUser(userData.userName, userData.password)
             .then ( loginResult => {
-              console.log(loginResult);
+
+              registerAndRedirectUser(loginResult);
+
             });
 
         })
@@ -453,16 +455,7 @@ function listenForLogins () {
     loginUser($('#userName').val(), $('#userPassword').val())
       .then ( res => {
 
-        // set cookie with user info
-        Cookies.set("singWithMe", `${res.token}|${res.userType}|${res.userName}`);
-
-        // take to host/singer home
-        if (res.userType === 'Host') {
-          window.location.assign(`/hosts/${res.userName}`);
-        }
-        else {
-          window.location.assign(`/singers/${res.userName}`);
-        }
+        registerAndRedirectUser(res);
 
       })
       .fail( err => {
@@ -470,6 +463,20 @@ function listenForLogins () {
       });
 
   });
+
+}
+function registerAndRedirectUser (userInfo) {
+
+  // set cookie with user info
+  Cookies.set("singWithMe", `${userInfo.token}|${userInfo.userType}|${userInfo.userName}`);
+
+  // take to host/singer home
+  if (userInfo.userType === 'Host') {
+    window.location.assign(`/hosts/${userInfo.userName}`);
+  }
+  else {
+    window.location.assign(`/singers/${userInfo.userName}`);
+  }
 
 }
 
