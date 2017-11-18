@@ -11,6 +11,7 @@ const ejs = require('ejs');
 const {router: usersRouter} = require('./users/router');
 const {router: authRouter, basicStrategy, jwtStrategy} = require('./auth');
 const {router: singersRouter} = require('./singers/router');
+const {router: hostsRouter} = require('./hosts/router');
 
 // app setup
 mongoose.Promise = global.Promise;
@@ -45,6 +46,7 @@ app.use(express.static('public'));
 app.use('/api/users/', usersRouter);
 app.use('/api/auth/', authRouter);
 app.use('/singers/', singersRouter);
+app.use('/hosts/', hostsRouter);
 
 
 // root domain

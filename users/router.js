@@ -90,8 +90,8 @@ router.get('/', (req, res) => {
 });
 
 // check for active session
-router.get('/session', (req, res) => {
-  res.json({validated: false});
+router.get('/current', passport.authenticate('jwt', {session: false}), (req, res) => {
+  res.json(req.user);
 });
 
 // UPDATE

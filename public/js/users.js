@@ -3,54 +3,84 @@
 function initUsers () {
 
   // check for valid jwt
-  checkForCurrentSession()
-    .then( res => {
+  const existingToken = checkForCurrentToken();
 
-      // if found
-      if (res.validated) {
+  // if token found
+  if (existingToken !== false) {
 
-        console.log('user validated');
+    // get user info
+    const existingToken = Cookies.get('singWithMe').split('|');
 
-        // get user type
-          // if singer, go to /singers
-          // if host, go to /hosts
+    // validate token
+    validateToken(existingToken[0])
+      .then( user => {
 
-      }
+        // send to user home page
+        if (user.type === 'Host') {
+          window.location.assign(`/hosts/${user.userName}`);
+        }
+        else {
+          window.location.assign(`/singers/${user.userName}`);
+        }
 
-      // if not, listen for user registrations
-      else {
+      })
+      .fail( err => {
+        console.log(err);
+      });
 
-        // for new users
-        listenForSingerRegistrations();
-        listenForHostRegistrations();
+  }
 
-        // validate stage name on change
-        validateStageName();
+  // if not
+  else {
 
-        // validate email on focus/change
-        validateUserEmail();
+    // for new users
+    listenForSingerRegistrations();
+    listenForHostRegistrations();
 
-        // validate password on focus/change
-        validateUserPassword();
+    // validate stage name on change
+    validateStageName();
 
-        // listen for logins
-        listenForLogins();
+    // validate email on focus/change
+    validateUserEmail();
 
-      }
+    // validate password on focus/change
+    validateUserPassword();
 
-    });
+    // listen for logins
+    listenForLogins();
+
+  }
 
 }
 
-// checks for existing valid jwt; returns authToken
-function checkForCurrentSession () {
+// checks for existing valid jwt; returns t/f if found/not
+function checkForCurrentToken () {
 
   // check if jwt cookie exists
-    // if it does, pass cookie value to current user endpoint
-      // if valid, send user to "type" home page
-      // if not, send user to login form
+  const cookieExists = Cookies.get('singWithMe');
 
-  return $.get('/api/users/session');
+  // if JWT cookie found
+  if (cookieExists !== undefined) {
+    return cookieExists;
+  }
+
+  // if not
+  else {
+    return false;
+  }
+
+}
+
+// validate user token from cookie
+function validateToken (token) {
+
+  const settings = {
+    type: 'GET',
+    url: '/api/users/current/',
+    headers: {"Authorization": `Bearer ${token}`}
+  }
+
+  return $.ajax(settings);
 }
 
 // watch for stage name "change" events, check entry
