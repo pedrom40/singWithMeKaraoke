@@ -5,6 +5,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const passport = require('passport');
+const ejs = require('ejs');
 
 // setup routers
 const {router: usersRouter} = require('./users/router');
@@ -15,6 +16,9 @@ const {router: singersRouter} = require('./singers/router');
 mongoose.Promise = global.Promise;
 const {PORT, DATABASE_URL} = require('./config');
 const app = express();
+
+// set the view engine to ejs
+app.set('view engine', 'ejs');
 
 // Logging
 app.use(morgan('common'));
@@ -45,12 +49,12 @@ app.use('/singers/', singersRouter);
 
 // root domain
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.render('pages/index');
 });
 
 // user login path
 app.get('/login', (req, res) => {
-  res.sendFile(__dirname + '/public/login.html');
+  res.render('pages/login');
 });
 
 

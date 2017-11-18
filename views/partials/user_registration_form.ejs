@@ -1,0 +1,38 @@
+<form class="js-<%- type %>-registration-form">
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <div class="form-group">
+        <label for="<%- type %>UserName">Stage Name:</label>
+        <input type="text" id="<%- type %>UserName" placeholder="JoeSingsTheBlues" required class="form-control js-<%- type %>-userName">
+        <span class="help-block js-<%- type %>-userName-help-block"></span>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6 col-md-6">
+      <div class="form-group">
+        <label for="<%- type %>Email">Email:</label>
+        <input type="email" id="<%- type %>Email" placeholder="<%- type %>@heart.com" required class="form-control js-<%- type %>-email">
+        <span class="help-block js-<%- type %>-email-help-block"></span>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-6">
+      <div class="form-group">
+        <label for="<%- type %>Password">Password:</label>
+        <input type="password" id="<%- type %>Password" placeholder="******" required class="form-control js-<%- type %>-password">
+        <span class="help-block js-<%- type %>-password-help-block"></span>
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-12">
+      <div class="form-group">
+        <input type="submit" value="Sign Up" class="btn btn-default btn-block">
+        <span class="help-block js-<%- type %>-submit-help-block"></span>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 login-msg">
+      <p>Already a <%- type %>? <a href="/login">Login Here</a></p>
+    </div>
+  </div>
+</form>

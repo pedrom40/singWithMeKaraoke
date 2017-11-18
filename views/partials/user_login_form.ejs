@@ -1,0 +1,23 @@
+<form class="js-login-form">
+  <div class="row">
+    <div class="col-sm-6 col-md-6">
+      <div class="form-group">
+        <label for="userName">Stage Name:</label>
+        <input type="text" id="userName" placeholder="JoeSingsTheBlues" required class="form-control js-user-name">
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-6">
+      <div class="form-group">
+        <label for="userPassword">Password:</label>
+        <input type="password" id="userPassword" placeholder="******" required class="form-control js-user-password">
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-12">
+      <div class="form-group">
+        <input type="submit" value="Login" class="btn btn-default btn-block">
+        <span class="help-block js-login-submit-help-block has-error"></span>
+      </div>
+    </div>
+  </div>
+  <input type="hidden" id="singerUserType" class="js-user-type" value="Singer">
+</form>

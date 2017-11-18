@@ -1,60 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sing With Me Karaoke</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Berkshire+Swash|Raleway">
-    <link rel="stylesheet" href="/css/main.css">
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
+  <% include ../partials/head %>
   <body>
     <main role="main">
 
-      <h1 class="sr-only">
-        <header role="banner">
-          Sing With Me Karaoke
-        </header>
-      </h1>
-
-      <section class="branding">
-        <nav role="nav" class="navbar navbar-default">
-          <div class="container-fluid">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a href="/login" id="login-btn" class="navbar-brand">LOGIN</a>
-            </div>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-                <li><a href="#">Link</a></li>
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">One more separated link</a></li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </nav>
-      </section>
+      <%- include('../partials/header') -%>
 
       <section class="registration-forms">
         <ul class="nav nav-tabs" role="tablist">
@@ -84,44 +34,7 @@
                     <li>See Shows in your area</li>
                     <li>Request Songs from Hosts</li>
                   </ul>
-                  <form class="js-singer-registration-form">
-                    <div class="row">
-                      <div class="col-sm-12 col-md-12">
-                        <div class="form-group">
-                          <label for="singerUserName">Stage Name:</label>
-                          <input type="text" id="singerUserName" placeholder="JoeSingsTheBlues" required class="form-control js-singer-userName">
-                          <span class="help-block js-singer-userName-help-block"></span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-sm-6 col-md-6">
-                        <div class="form-group">
-                          <label for="singerEmail">Email:</label>
-                          <input type="email" id="singerEmail" placeholder="singer@heart.com" required class="form-control js-singer-email">
-                          <span class="help-block js-singer-email-help-block"></span>
-                        </div>
-                      </div>
-                      <div class="col-sm-6 col-md-6">
-                        <div class="form-group">
-                          <label for="singerPassword">Password:</label>
-                          <input type="password" id="singerPassword" placeholder="******" required class="form-control js-singer-password">
-                          <span class="help-block js-singer-password-help-block"></span>
-                        </div>
-                      </div>
-                      <div class="col-sm-12 col-md-12">
-                        <div class="form-group">
-                          <input type="submit" value="Sign Up" class="btn btn-default btn-block">
-                          <span class="help-block js-singer-submit-help-block"></span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-12 login-msg">
-                        <p>Already a Singer? <a href="/login">Login Here</a></p>
-                      </div>
-                    </div>
-                  </form>
+                  <%- include('../partials/user_registration_form', {type: 'singer'}) -%>
                 </div>
               </div>
               <div class="row blue-section">
@@ -188,44 +101,7 @@
                     <li>Access to our Show Manager App</li>
                     <li>Create a Host Page on our site</li>
                   </ul>
-                  <form class="js-host-registration-form">
-                    <div class="row">
-                      <div class="col-sm-12 col-md-12">
-                        <div class="form-group">
-                          <label for="hostUserName">Stage Name:</label>
-                          <input type="text" id="hostUserName" placeholder="RockstarKaraoke" required class="form-control js-host-userName">
-                          <span class="help-block js-host-userName-help-block"></span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-sm-6 col-md-6">
-                        <div class="form-group">
-                          <label for="hostEmail">Email:</label>
-                          <input type="email" id="hostEmail" placeholder="singer@heart.com" class="form-control js-host-email">
-                          <span class="help-block js-host-email-help-block"></span>
-                        </div>
-                      </div>
-                      <div class="col-sm-6 col-md-6">
-                        <div class="form-group">
-                          <label for="hostPassword">Password:</label>
-                          <input type="password" id="hostPassword" placeholder="******" class="form-control js-host-password">
-                          <span class="help-block js-host-password-help-block"></span>
-                        </div>
-                      </div>
-                      <div class="col-sm-12 col-md-12">
-                        <div class="form-group">
-                          <input type="submit" value="Sign Up" class="btn btn-default btn-block">
-                          <span class="help-block js-host-submit-help-block"></span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-12 login-msg">
-                        <p>Already a Host? <a href="/login">Login Here</a></p>
-                      </div>
-                    </div>
-                  </form>
+                  <%- include('../partials/user_registration_form', {type: 'host'}) -%>
                 </div>
               </div>
               <div class="row blue-section">
@@ -283,11 +159,9 @@
 
     </main>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
-    <script src="/js/users.js"></script>
-    <script src="/js/shared.js"></script>
+    <footer>
+      <% include ../partials/footer %>
+    </footer>
 
   </body>
 </html>
