@@ -32,7 +32,11 @@ router.post('/login', (req, res) => {
     })
     .then( () => {
       const authToken = createAuthToken(user.apiRepr());
-      res.json({token: authToken});
+      res.json({
+        token: authToken,
+        userType: user.type,
+        userName: user.userName
+      });
     })
     .catch(error => {console.log(error);
       return res.status(401).send({

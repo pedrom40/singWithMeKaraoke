@@ -421,11 +421,22 @@ function listenForLogins () {
     event.preventDefault();
 
     loginUser($('#userName').val(), $('#userPassword').val())
-      .then ( loginResult => {
-        console.log(loginResult);
+      .then ( res => {
+
+        // set cookie with user info
+        Cookies.set("singWithMe", `${res.token}|${res.userType}|${res.userName}`);
+
+        // take to host/singer home
+        if (res.userType === 'Host') {
+          window.location.assign(`/hosts/${res.userName}`);
+        }
+        else {
+          window.location.assign(`/singers/${res.userName}`);
+        }
+
       })
       .fail( err => {
-        console.log(err);
+        $('.js-login-submit-help-block').html(err.responseText);
       });
 
   });
@@ -435,11 +446,13 @@ function listenForLogins () {
 // login users
 function loginUser (userName, password) {
 
+  // setup vars for stringify
   const qData = {
     userName: userName,
     password: password
   }
 
+  // post to login route
   const settings = {
     type: 'POST',
     url: '/api/auth/login',
