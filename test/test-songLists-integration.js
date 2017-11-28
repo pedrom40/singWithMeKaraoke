@@ -4,7 +4,7 @@ const chaiHttp = require('chai-http');
 const faker = require('faker');
 const mongoose = require('mongoose');
 
-const {User} = require('../users/model');
+const {SongList} = require('../song_lists/model');
 const {app, runServer, closeServer} = require('../server');
 const {TEST_DATABASE_URL} = require('../config');
 
@@ -23,17 +23,21 @@ function seedData () {
   }
 
   // return the test data
-  return User.insertMany(seedData);
+  return SongList.insertMany(seedData);
 
 }
 
 // generate test data
 function generateData () {
   return {
-    type: "Singer",
-    userName: faker.internet.userName(),
-    email: faker.internet.email(),
-    password: faker.internet.password()
+    userId: faker.random.uuid(),
+    title: faker.random.words(),
+    songs: [
+      {
+        songTitle: faker.random.words(),
+        songArtist: faker.random.words()
+      }
+    ]
   }
 }
 
@@ -43,7 +47,7 @@ function tearDownDb () {
   return mongoose.connection.dropDatabase();
 }
 
-describe('Users API resource', () => {
+describe('Song List API resource', () => {
 
   before( () => {
     return runServer(TEST_DATABASE_URL);
@@ -65,7 +69,7 @@ describe('Users API resource', () => {
   // test GET endpoint
   describe('GET endpoint', () => {
 
-    it('should return all users', () => {
+    it('should return all records', () => {
 
       // make response variable available throughout nests
       let res;
@@ -73,7 +77,7 @@ describe('Users API resource', () => {
       return chai.request(app)
 
         // get all the existing records
-        .get('/api/users')
+        .get('/api/songLists')
 
         // now check them out
         .then( _res => {
@@ -84,7 +88,7 @@ describe('Users API resource', () => {
           expect(res.body).to.have.length.of.at.least(1);
 
           // send number of records to next promise
-          return User.count();
+          return SongList.count();
 
         })
 
@@ -100,13 +104,13 @@ describe('Users API resource', () => {
   // test POST endpoint
   describe('POST endpoint', () => {
 
-    it('should add a new user', () => {
+    it('should add a new record', () => {
 
       // init new record
       const newRecord = generateData();
 
       return chai.request(app)
-        .post('/api/users')
+        .post('/api/songLists')
         .send(newRecord)
         .then( res => {
 
@@ -114,19 +118,19 @@ describe('Users API resource', () => {
           expect(res).to.have.status(201);
 
           // expected return from apiRepr method in model
-          expect(res.body).to.have.deep.keys({type: 1, userName: 1, firstName: 1, lastName: 1});
+          expect(res.body).to.have.deep.keys({title: 1, songs: 1});
 
           // check that the info matches what was passed in
-          expect(res.body.userName).to.equal(`${newRecord.userName}`);
+          expect(res.body.title).to.equal(`${newRecord.title}`);
 
           // pass new record to next part in the chain (promise)
-          return User.find({userName: res.body.userName});
+          return SongList.find({title: res.body.title});
 
         })
-        .then( user => {
+        .then( list => {
 
           // check that the title in the post matches the title in the db
-          expect(user[0].userName).to.equal(newRecord.userName);
+          expect(list[0].title).to.equal(newRecord.title);
 
         });
 
@@ -141,21 +145,25 @@ describe('Users API resource', () => {
 
       // data to update
       const updateData = {
-        firstName: 'Pedro',
-        lastName: 'Morin',
-        phone: '361.903.0942'
+        title: 'Rock Songs',
+        songs: [
+          {
+            songTitle: "Sweet Child O' Mine",
+            songArtist: "Guns N' Roses"
+          }
+        ]
       }
 
-      return User
+      return SongList
         .findOne()
-        .then( user => {
+        .then( list => {
 
           // set the id property of the update data to the record we returned
-          updateData.id = user.id;
+          updateData.id = list.id;
 
           // make the update, then return the record to the next promise
           return chai.request(app)
-            .put(`/api/users/${user.id}`)
+            .put(`/api/songLists/${list.id}`)
             .send(updateData);
 
         })
@@ -165,15 +173,13 @@ describe('Users API resource', () => {
           expect(res.status).to.equal(204);
 
           // get the record
-          return User.findById(updateData.id);
+          return SongList.findById(updateData.id);
 
         })
-        .then( user => {
+        .then( list => {
 
           // check that the title and content equal the updated values
-          expect(user.firstName).to.equal(updateData.firstName);
-          expect(user.lastName).to.equal(updateData.lastName);
-          expect(user.phone).to.equal(updateData.phone);
+          expect(list.title).to.equal(updateData.title);
 
         });
 
@@ -187,15 +193,15 @@ describe('Users API resource', () => {
     it('should delete a record by id', () => {
 
       // declare record var here so we can access it across the test
-      let user;
+      let list;
 
-      return User
+      return SongList
         .findOne()
-        .then ( _user => {
+        .then ( _list => {
 
           // set the returned record as our test var, then send for deletion
-          user = _user;
-          return chai.request(app).delete(`/api/users/${user.id}`);
+          list = _list;
+          return chai.request(app).delete(`/api/songLists/${list.id}`);
 
         })
         .then( res => {
@@ -204,54 +210,15 @@ describe('Users API resource', () => {
           expect(res.status).to.equal(204);
 
           // attempt to retrieve the record
-          return User.findById(user.id);
+          return SongList.findById(list.id);
 
         })
-        .then( _user => {
+        .then( _list => {
 
           // should not find record
-          expect(_user).to.not.exist;
+          expect(_list).to.not.exist;
 
         });
-    });
-
-  });
-
-  // test login
-  describe('AUTH test', () => {
-
-    it('should return valid JWT', () => {
-
-      // init new record
-      const newRecord = generateData();
-
-      // create new record
-      return chai.request(app)
-        .post('/api/users')
-        .send(newRecord)
-        .then( resp => {
-
-          // login with new record using basic auth
-          return chai.request(app)
-            .post('/api/auth/login')
-            .send({userName: newRecord.userName, password: newRecord.password})
-            .then( res => {
-
-              // check for token
-              expect(res.body).to.have.property('token');
-
-              // use authToken to access protected area
-              return chai.request(app)
-                .get(`/api/users/id/${newRecord.userName}`)
-                .set('Authorization', `Bearer ${res.body.token}`)
-                .then( result => {
-                  expect(result.body).to.have.property('userId');
-                });
-
-            });
-
-        });
-
     });
 
   });

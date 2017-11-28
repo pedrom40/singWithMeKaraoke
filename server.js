@@ -10,8 +10,9 @@ const ejs = require('ejs');
 // setup routers
 const {router: usersRouter} = require('./users/router');
 const {router: authRouter, basicStrategy, jwtStrategy} = require('./auth');
-const {router: singersRouter} = require('./singers/router');
+const {router: songListRouter} = require('./song_lists/router');
 const {router: hostsRouter} = require('./hosts/router');
+const {router: singersRouter} = require('./singers/router');
 
 // app setup
 mongoose.Promise = global.Promise;
@@ -45,6 +46,8 @@ app.use(express.static('public'));
 
 app.use('/api/users/', usersRouter);
 app.use('/api/auth/', authRouter);
+app.use('/api/songLists/', songListRouter);
+
 app.use('/singers/', singersRouter);
 app.use('/hosts/', hostsRouter);
 
@@ -57,12 +60,6 @@ app.get('/', (req, res) => {
 // user login path
 app.get('/login', (req, res) => {
   res.render('pages/login');
-});
-
-
-// A protected endpoint which needs a valid JWT to access it
-app.get('/api/protected', passport.authenticate('jwt', {session: false}), (req, res) => {
-  return res.json({data: 'rosebud'});
 });
 
 // catch all method
