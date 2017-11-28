@@ -89,11 +89,6 @@ router.get('/', (req, res) => {
     });
 });
 
-// check for active session
-router.get('/current', passport.authenticate('jwt', {session: false}), (req, res) => {
-  res.json(req.user);
-});
-
 // UPDATE
 router.put('/:id', jsonParser, (req, res) => {
 
@@ -108,7 +103,7 @@ router.put('/:id', jsonParser, (req, res) => {
 
   // updatable fields
   const toUpdate = {};
-  const updateableFields = ['firstName', 'lastName', 'userName', 'email', 'password', 'phone'];
+  const updateableFields = ['firstName', 'lastName', 'userName', 'email', 'password', 'phone', 'location'];
 
   updateableFields.forEach(field => {
     if (field in req.body) {
@@ -136,16 +131,19 @@ router.delete('/:id', (req, res) => {
 });
 
 
+// check for active session
+router.get('/current', passport.authenticate('jwt', {session: false}), (req, res) => {
+  res.json(req.user);
+});
+
 // check for unique userName
 router.get('/userName/:userName', (req, res) => {
 
   // lookup user by userName and return the count
   return User
-          .find({userName: req.params.userName})
+          .findOne({userName: req.params.userName})
           .count()
-          .then( count => {
-            res.json({totalUsers: count});
-          });
+          .then( count => res.json({totalUsers: count}) );
 
 });
 
@@ -159,6 +157,26 @@ router.get('/email/:email', (req, res) => {
           .then( count => {
             res.json({totalUsers: count});
           });
+
+});
+
+// returns user's location
+router.get('/location/:userName', passport.authenticate('jwt', {session: false}), (req, res) => {
+
+  // lookup user by userName and return the count
+  return User
+    .findOne({userName: req.params.userName})
+    .then(user => res.json({location: user.location}));
+
+});
+
+// returns user's id
+router.get('/id/:userName', passport.authenticate('jwt', {session: false}), (req, res) => {
+
+  // lookup user by userName and return the count
+  return User
+    .findOne({userName: req.params.userName})
+    .then(user => res.json({userId: user.id}));
 
 });
 

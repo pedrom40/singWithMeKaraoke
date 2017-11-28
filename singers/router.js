@@ -6,9 +6,10 @@ const {User} = require('../users/model');
 const router = express.Router();
 const jsonParser = bodyParser.json();
 
+
 // singer home
-router.get('/:userName', passport.authenticate('jwt', {session: false}), (req, res) => {
-  res.send(`${req.params.userName}'s Singer Home Page`);
+router.get('/:userName', (req, res) => {
+  res.render('pages/singers');
 });
 
 module.exports = {router};

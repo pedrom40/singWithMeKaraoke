@@ -6,9 +6,10 @@ const {User} = require('../users/model');
 const router = express.Router();
 const jsonParser = bodyParser.json();
 
+
 // host home
-router.get('/:userName', passport.authenticate('jwt', {session: false}), (req, res) => {
-  res.send(`${req.params.userName}'s Host Home Page`);
+router.get('/:userName', (req, res) => {
+  res.render('pages/hosts');
 });
 
 module.exports = {router};

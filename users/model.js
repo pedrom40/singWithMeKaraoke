@@ -24,6 +24,10 @@ const UserSchema = mongoose.Schema ({
     minlength: 6,
     maxlength: 72
   },
+  location: {
+    city: String,
+    state: String
+  },
   phone: {type: String}
 });
 

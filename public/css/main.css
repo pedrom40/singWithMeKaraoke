@@ -3,7 +3,8 @@ body {
   letter-spacing: 1px; }
   body h1 {
     font-family: "Berkshire Swash", cursive;
-    font-weight: bold; }
+    font-weight: bold;
+    color: white; }
   body h2, body h3, body h4, body h5, body h6 {
     font-family: "Raleway", sans-serif;
     font-weight: bold; }
@@ -31,12 +32,25 @@ body {
 .black-section {
   background: black; }
 
+.performer {
+  position: absolute;
+  top: 50px;
+  right: -65px; }
+  .performer img {
+    height: 500px; }
+
 .branding {
-  width: 100%;
-  height: 667px;
-  background-image: url("/images/main-bg.jpg");
+  height: 550px;
+  background-image: url("/images/star-bg.jpg");
   background-size: cover;
   background-repeat: no-repeat; }
+  .branding .logo {
+    height: 125px;
+    margin-top: 85px;
+    padding: 22px;
+    background-color: #1485cc; }
+    .branding .logo img {
+      width: 185px; }
   .branding .navbar, .branding .navbar-default {
     background-color: transparent;
     border: none; }
@@ -58,17 +72,25 @@ body {
       text-shadow: 0 0 10px #333; }
 
 @media only screen and (min-width: 768px) {
+  .performer {
+    top: 10px;
+    right: -10px; }
+    .performer img {
+      height: 389px; }
+
   .branding {
-    height: 265px;
-    background-image: url("/images/main-bg-large.jpg");
-    background-size: contain; }
+    height: 400px; }
+    .branding .logo {
+      height: 100px;
+      margin-top: -20px;
+      padding: 20px; }
+      .branding .logo img {
+        width: 150px; }
     .branding .navbar-header {
       float: none; }
       .branding .navbar-header .navbar-toggle {
-        display: inline-block;
-        padding: 6px 15px; }
+        display: inline-block; }
     .branding .navbar .navbar-brand, .branding .navbar-default .navbar-brand {
-      padding: 12px 14px;
       font-size: 16px; }
     .branding .container-fluid > .navbar-collapse, .branding .container-fluid > .navbar-header, .branding .container > .navbar-collapse, .branding .container > .navbar-header {
       margin-right: -15px;
@@ -76,13 +98,11 @@ body {
     .branding .navbar-collapse.collapse {
       display: none !important; } }
 @media only screen and (min-width: 1024px) {
-  .branding {
-    height: 352px; }
-    .branding .navbar-header .navbar-toggle {
-      padding: 13px 20px; }
-    .branding .navbar .navbar-brand, .branding .navbar-default .navbar-brand {
-      padding: 17px 20px;
-      font-size: 20px; }
+  .branding .navbar-header .navbar-toggle {
+    padding: 13px 20px; }
+  .branding .navbar .navbar-brand, .branding .navbar-default .navbar-brand {
+    padding: 17px 20px;
+    font-size: 20px; }
 
   .registration-forms h2 {
     margin-bottom: 35px;

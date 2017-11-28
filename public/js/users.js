@@ -2,26 +2,22 @@
 
 function initUsers () {
 
-  // check for valid jwt
-  const existingToken = checkForCurrentToken();
+  // check for valid jwt and path
+  const cookieExists = Cookies.get('singWithMe');
+  const currentPath = window.location.pathname;
 
   // if token found
-  if (existingToken !== false) {
+  if (cookieExists !== undefined) {
 
     // get user info
-    const existingToken = Cookies.get('singWithMe').split('|');
+    const token = Cookies.get('singWithMe').split('|')[0];
 
     // validate token
-    validateToken(existingToken[0])
+    validateToken(token)
       .then( user => {
 
         // send to user home page
-        if (user.type === 'Host') {
-          window.location.assign(`/hosts/${user.userName}`);
-        }
-        else {
-          window.location.assign(`/singers/${user.userName}`);
-        }
+        redirectUser(cookieExists);
 
       })
       .fail( err => {
@@ -33,40 +29,32 @@ function initUsers () {
   // if not
   else {
 
-    // for new users
-    listenForSingerRegistrations();
-    listenForHostRegistrations();
+    // if on the home or login pages
+    if (currentPath === '/' || currentPath === '/login') {
 
-    // validate stage name on change
-    validateStageName();
+      // for new users
+      listenForSingerRegistrations();
+      listenForHostRegistrations();
 
-    // validate email on focus/change
-    validateUserEmail();
+      // validate stage name on change
+      validateStageName();
 
-    // validate password on focus/change
-    validateUserPassword();
+      // validate email on focus/change
+      validateUserEmail();
 
-    // listen for logins
-    listenForLogins();
+      // validate password on focus/change
+      validateUserPassword();
 
-  }
+      // listen for logins
+      listenForLogins();
 
-}
+    }
 
-// checks for existing valid jwt; returns t/f if found/not
-function checkForCurrentToken () {
+    // if not on the home page already, send them there
+    else {
+      window.location.assign('/');
+    }
 
-  // check if jwt cookie exists
-  const cookieExists = Cookies.get('singWithMe');
-
-  // if JWT cookie found
-  if (cookieExists !== undefined) {
-    return cookieExists;
-  }
-
-  // if not
-  else {
-    return false;
   }
 
 }
@@ -453,31 +441,225 @@ function listenForLogins () {
     event.preventDefault();
 
     loginUser($('#userName').val(), $('#userPassword').val())
-      .then ( res => {
-
-        registerAndRedirectUser(res);
-
-      })
-      .fail( err => {
-        $('.js-login-submit-help-block').html(err.responseText);
-      });
+      .then (res => registerAndRedirectUser(res))
+      .fail(err => $('.js-login-submit-help-block').html(err.responseText));
 
   });
 
 }
+
+// set cookie and redirect user based on type
 function registerAndRedirectUser (userInfo) {
 
   // set cookie with user info
   Cookies.set("singWithMe", `${userInfo.token}|${userInfo.userType}|${userInfo.userName}`);
 
+  // get the cookie
+  const newUserInfo = Cookies.get('singWithMe');
+
   // take to host/singer home
-  if (userInfo.userType === 'Host') {
-    window.location.assign(`/hosts/${userInfo.userName}`);
+  redirectUser(newUserInfo);
+
+}
+
+// set cookie and redirect user based on type
+function redirectUser (infoHolder) {
+
+  // set cookie with user info
+  const userInfo = infoHolder.split('|');
+  const token = userInfo[0];
+  const userType = userInfo[1];
+  const userName = userInfo[2];
+
+  // set path name
+  const currentUrl = window.location.pathname;
+
+  // take to host/singer home
+  if (userType === 'Host' && currentUrl !== `/hosts/${userName}`) {
+    window.location.assign(`/hosts/${userName}`);
   }
-  else {
-    window.location.assign(`/singers/${userInfo.userName}`);
+  else if (userType === 'Singer' && currentUrl !== `/singers/${userName}`) {
+    window.location.assign(`/singers/${userName}`);
   }
 
+  // if validated and on home page
+  else {
+
+    // check for complete profile
+    checkUserProfileComplete(userName, userType, token);
+
+  }
+
+}
+
+// looks for location values in user profile
+function checkUserProfileComplete (userName, userType, token) {
+
+  getUserLocation(userName, token)
+    .then( res => {
+
+      // if user has a location, then load all features for type
+      if (res.location.hasOwnProperty('city')) {
+        loadAllFeatures(userName, userType);
+      }
+      else {
+        loadProfileUpdateForm(userName, token);
+      }
+
+    })
+    .fail(err => console.log(err));
+
+}
+
+// loads all the user features
+function loadAllFeatures (userName, userType) {
+
+  if (userType === 'Singer') {
+    loadSingerFeatures(userName);
+  }
+  else {
+    loadHostFeatures(userName);
+  }
+
+}
+
+// returns user's location
+function getUserLocation (userName, token) {
+  const settings = {
+    type: 'GET',
+    url: `/api/users/location/${userName}`,
+    headers: {"Authorization": `Bearer ${token}`}
+  }
+  return $.ajax(settings);
+}
+
+// load all singer features
+function loadSingerFeatures (userName) {
+  console.log('load all singer features');
+}
+
+// load all singer features
+function loadHostFeatures (userName) {
+  console.log('load all host features');
+}
+
+// load profile update form
+function loadProfileUpdateForm (userName, token) {
+
+  // start fresh
+  $('.js-main-content').empty();
+
+  // markup form
+  const template = `
+    <form class="js-user-update-form">
+      <p>
+        Please update your profile below. Your location is required so we can find shows
+        and hosts near you. Your phone number is not required but necessary if you want to
+        receive text updates about new activities. The rest is optional, but nice to have.
+      </p>
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+          <div class="form-group">
+            <label for="firstName">Name:</label>
+            <input type="text" id="firstName" placeholder="First" class="form-control js-firstName">
+            <span class="help-block js-firstName-help-block"></span>
+
+            <input type="text" id="lastName" placeholder="Last" class="form-control js-lastName">
+            <span class="help-block js-lastName-help-block"></span>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12">
+          <div class="form-group">
+            <label for="city">Location:</label>
+            <input type="text" id="city" placeholder="Austin" required class="form-control js-city">
+            <span class="help-block js-city-help-block"></span>
+
+            <select id="state" class="form-control js-state"></select>
+            <span class="help-block js-state-help-block"></span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 col-md-6">
+          <div class="form-group">
+            <label for="Phone">Phone:</label>
+            <input type="tel" id="phone" placeholder="888.888.8888" class="form-control js-phone">
+            <span class="help-block js-phone-help-block"></span>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12">
+          <div class="form-group">
+            <input type="submit" value="Update" class="btn btn-default btn-block">
+            <span class="help-block js-update-submit-help-block"></span>
+          </div>
+        </div>
+      </div>
+      <input type="hidden" id="userName" value="${userName}">
+    </form>
+  `;
+
+  // send to view
+  $('.js-main-content').append(template);
+
+  // populate state menu
+  populateStateSelect('.js-state');
+
+  // listen for update
+  listenForUpdate(token);
+
+}
+function listenForUpdate (token) {
+
+  $('.js-user-update-form').submit( event => {
+    event.preventDefault();
+
+    // get the user's id
+    getUserId($('#userName').val(), token)
+      .then( res => {
+
+        // gather update data
+        const data = {
+          id: res.userId,
+          firstName: $('#firstName').val(),
+          lastName: $('#lastName').val(),
+          phone: $('#phone').val(),
+          location: {
+            city: $('#city').val(),
+            state: $('#state').val()
+          }
+        }
+
+        // call api to update user
+        updateUser(data)
+          .then(res => initUsers())
+          .fail(err => console.log(err));
+
+      });
+
+  });
+
+}
+
+// returns user ID from userName
+function getUserId (userName, token) {
+  const settings = {
+    type: 'GET',
+    url: `/api/users/id/${userName}`,
+    headers: {"Authorization": `Bearer ${token}`}
+  }
+  return $.ajax(settings);
+}
+
+// send put to user
+function updateUser(data) {
+  const settings = {
+    url: `/api/users/${data.id}`,
+    type: 'PUT',
+    contentType: 'application/json',
+    dataType: 'json',
+    data: JSON.stringify(data)
+  }
+  return $.ajax(settings);
 }
 
 // login users

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <% include ../partials/head %>
+  <%- include('../partials/head', {title: "Home"}) -%>
   <body>
     <main role="main">
 
@@ -24,7 +24,7 @@
             <div class="container-fluid">
               <div class="row black-section">
                 <div class="col-sm-6 col-md-6 col-lg-6">
-                  <img src="http://via.placeholder.com/450x400" class="img-responsive">
+                  <img src="http://via.placeholder.com/450x500" class="img-responsive">
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-6">
                   <h2>Register as a Singer</h2>
@@ -159,9 +159,7 @@
 
     </main>
 
-    <footer>
-      <% include ../partials/footer %>
-    </footer>
+    <%- include('../partials/footer') -%>
 
   </body>
 </html>
