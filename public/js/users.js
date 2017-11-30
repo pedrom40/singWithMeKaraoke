@@ -500,7 +500,7 @@ function checkUserProfileComplete (userName, userType, token) {
 
       // if user has a location, then load all features for type
       if (res.location.hasOwnProperty('city')) {
-        loadAllFeatures(userName, userType);
+        loadAllFeatures(userName, userType, token);
       }
       else {
         loadProfileUpdateForm(userName, token);
@@ -512,13 +512,13 @@ function checkUserProfileComplete (userName, userType, token) {
 }
 
 // loads all the user features
-function loadAllFeatures (userName, userType) {
+function loadAllFeatures (userName, userType, token) {
 
   if (userType === 'Singer') {
-    loadSingerFeatures(userName);
+    loadSingerFeatures(userName, token);
   }
   else {
-    loadHostFeatures(userName);
+    loadHostFeatures(userName, token);
   }
 
 }
@@ -531,16 +531,6 @@ function getUserLocation (userName, token) {
     headers: {"Authorization": `Bearer ${token}`}
   }
   return $.ajax(settings);
-}
-
-// load all singer features
-function loadSingerFeatures (userName) {
-  console.log('load all singer features');
-}
-
-// load all singer features
-function loadHostFeatures (userName) {
-  console.log('load all host features');
 }
 
 // load profile update form

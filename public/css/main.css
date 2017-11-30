@@ -117,6 +117,14 @@ body {
   .registration-forms p {
     font-size: 18px;
     line-height: 28px; } }
+footer {
+  font-size: 12px;
+  color: #ccc;
+  text-align: center; }
+  footer a {
+    color: #ccc;
+    text-decoration: underline; }
+
 .registration-forms {
   margin-top: -57px; }
   .registration-forms .nav-tabs {
@@ -141,5 +149,14 @@ body {
     background: black; }
     .registration-forms .tab-content .login-msg {
       text-align: center; }
+
+.song-lists h3 {
+  margin-bottom: 45px;
+  color: white; }
+.song-lists table {
+  margin: 15px 0;
+  background: white; }
+.song-lists label {
+  color: white; }
 
 /*# sourceMappingURL=main.css.map */

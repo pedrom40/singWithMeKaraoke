@@ -107,4 +107,12 @@ router.delete('/:id', (req, res) => {
 });
 
 
+// return user's song lists
+router.get('/:userId', (req, res) => {console.log(req.params);
+  return SongList.find({userId: req.params.userId})
+    .then( lists => res.json( lists.map( list => list.apiRepr()) ))
+    .catch( err => res.status(500).json({message: 'Internal server error'}) );
+});
+
+
 module.exports = {router};
