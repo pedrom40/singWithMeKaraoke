@@ -95,6 +95,20 @@ function loadSongListsTabs (lists, userId) {
           <tbody>
             ${songRows}
           </tbody>
+          <tfoot>
+            <tr>
+              <td>
+                <button type="button" id="editList_${list.id}" class="btn btn-primary js-edit-list-btn">
+                  Edit List
+                </button>
+              </td>
+              <td>
+                <button type="button" id="deleteList_${list.id}" class="btn btn-danger js-delete-list-btn">
+                  Delete List
+                </button>
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     `;
@@ -125,6 +139,7 @@ function loadSongListsTabs (lists, userId) {
     <div class="tab-content">
       ${songsContainer}
     </div>
+    <input type="hidden" id="userId" value="${userId}">
   `;
 
   // send all markup to view
@@ -214,6 +229,7 @@ function addSongFormMarkup (userId) {
 // listener that presides over the song list component
 function listenForSongActions () {
 
+  // add new input events
   $('.js-add-song-list-form')
     .click( event => {
       event.preventDefault();
@@ -238,6 +254,61 @@ function listenForSongActions () {
         addNewSongInput(event.target.id);
       }
     });
+
+  // edit list events
+  $('.js-edit-list-btn')
+    .click( event => {
+      event.preventDefault();
+
+      // isolate song list id
+      const listId = event.target.id.split('_');
+
+      // init update
+      loadEditSongListForm(listId[1]);
+
+    });
+
+  // delete list events
+  $('.js-delete-list-btn')
+    .click( event => {
+      event.preventDefault();
+
+      // isolate song list id
+      const listId = event.target.id.split('_');
+
+      // init delete
+      confirmSongListDelete(listId[1]);
+
+    });
+
+}
+
+// loads edit song list form with values
+function loadEditSongListForm (listId) {
+  console.log(`edit ${listId}`);
+}
+
+// loads edit song list form with values
+function confirmSongListDelete (listId) {
+
+  // confirm delete
+  const confirmDelete = confirm('Delete this List?');
+
+  // on confirm
+  if (confirmDelete) {
+
+    // send to delete api endpoint
+    deleteSongList(listId)
+      .then( res => songListComponent($('#userId').val(), false))
+      .fail( err => {
+        const msg = {
+          type: 'error',
+          content: err.responseJSON.message
+        }
+        showMsg(msg);
+      });
+
+  }
 
 }
 
@@ -367,4 +438,16 @@ function createSongList (data) {
 
   return $.ajax(settings);
 
+}
+
+// delete song list
+function deleteSongList (listId) {
+
+  const settings = {
+    url: `/api/songLists/${listId}`,
+    type: 'DELETE'
   }
+
+  return $.ajax(settings);
+
+}

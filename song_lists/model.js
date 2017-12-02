@@ -20,7 +20,7 @@ const SongListSchema = mongoose.Schema ({
 // for sending user objects without sensitive data
 SongListSchema.methods.apiRepr = function() {
   return {
-    userId: this.userId,
+    id: this.id,
     title: this.title,
     songs: this.songs || ''
   };
