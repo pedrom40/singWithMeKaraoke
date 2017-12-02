@@ -17,6 +17,13 @@ body {
   body .btn {
     border: none;
     border-radius: 0; }
+  body .bg-danger {
+    margin-bottom: 15px;
+    padding: 15px;
+    font-family: "Raleway", sans-serif;
+    font-weight: bold;
+    color: black;
+    background: yellow; }
 
 .blue-section, .grey-section, .black-section {
   padding: 20px; }

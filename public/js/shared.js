@@ -3,6 +3,31 @@ function validateEmail(email) {
   return re.test(email);
 }
 
+function showMsg(msg) {
+
+  if (msg.type === 'error') {
+
+    $('.js-notification')
+      .removeClass('hidden')
+      .addClass('bg-danger')
+      .html(msg.content)
+      .delay(6000)
+      .fadeOut(400);
+
+  }
+  else {
+
+    $('.js-notification')
+      .removeClass('hidden')
+      .addClass('bg-info')
+      .html(msg.content)
+      .delay(6000)
+      .fadeOut(400);
+
+  }
+
+}
+
 // setup state select menus
 function populateStateSelect (element) {
 

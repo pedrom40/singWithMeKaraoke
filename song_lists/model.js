@@ -17,13 +17,11 @@ const SongListSchema = mongoose.Schema ({
   ]
 });
 
-// necessary plugin to enable "unique" feature
-SongListSchema.plugin(require('mongoose-unique-validator'));
-
 // for sending user objects without sensitive data
 SongListSchema.methods.apiRepr = function() {
   return {
-    title: this.title || '',
+    userId: this.userId,
+    title: this.title,
     songs: this.songs || ''
   };
 };

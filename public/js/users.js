@@ -469,10 +469,10 @@ function redirectUser (infoHolder) {
   const userInfo = infoHolder.split('|');
   const token = userInfo[0];
   const userType = userInfo[1];
-  const userName = userInfo[2];
+  const userName = decodeURIComponent(userInfo[2]);
 
   // set path name
-  const currentUrl = window.location.pathname;
+  const currentUrl = decodeURIComponent(window.location.pathname);
 
   // take to host/singer home
   if (userType === 'Host' && currentUrl !== `/hosts/${userName}`) {
@@ -541,51 +541,53 @@ function loadProfileUpdateForm (userName, token) {
 
   // markup form
   const template = `
-    <form class="js-user-update-form">
-      <p>
-        Please update your profile below. Your location is required so we can find shows
-        and hosts near you. Your phone number is not required but necessary if you want to
-        receive text updates about new activities. The rest is optional, but nice to have.
-      </p>
-      <div class="row">
-        <div class="col-sm-12 col-md-12">
-          <div class="form-group">
-            <label for="firstName">Name:</label>
-            <input type="text" id="firstName" placeholder="First" class="form-control js-firstName">
-            <span class="help-block js-firstName-help-block"></span>
+    <section class="black-section">
+      <form class="js-user-update-form">
+        <p>
+          Please update your profile below. Your location is required so we can find shows
+          and hosts near you. Your phone number is not required but necessary if you want to
+          receive text updates about new activities. The rest is optional, but nice to have.
+        </p>
+        <div class="row">
+          <div class="col-sm-12 col-md-12">
+            <div class="form-group">
+              <label for="firstName">Name:</label>
+              <input type="text" id="firstName" placeholder="First" class="form-control js-firstName">
+              <span class="help-block js-firstName-help-block"></span>
 
-            <input type="text" id="lastName" placeholder="Last" class="form-control js-lastName">
-            <span class="help-block js-lastName-help-block"></span>
+              <input type="text" id="lastName" placeholder="Last" class="form-control js-lastName">
+              <span class="help-block js-lastName-help-block"></span>
+            </div>
           </div>
-        </div>
-        <div class="col-sm-12 col-md-12">
-          <div class="form-group">
-            <label for="city">Location:</label>
-            <input type="text" id="city" placeholder="Austin" required class="form-control js-city">
-            <span class="help-block js-city-help-block"></span>
+          <div class="col-sm-12 col-md-12">
+            <div class="form-group">
+              <label for="city">Location:</label>
+              <input type="text" id="city" placeholder="Austin" required class="form-control js-city">
+              <span class="help-block js-city-help-block"></span>
 
-            <select id="state" class="form-control js-state"></select>
-            <span class="help-block js-state-help-block"></span>
+              <select id="state" class="form-control js-state"></select>
+              <span class="help-block js-state-help-block"></span>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-6 col-md-6">
-          <div class="form-group">
-            <label for="Phone">Phone:</label>
-            <input type="tel" id="phone" placeholder="888.888.8888" class="form-control js-phone">
-            <span class="help-block js-phone-help-block"></span>
+        <div class="row">
+          <div class="col-sm-6 col-md-6">
+            <div class="form-group">
+              <label for="Phone">Phone:</label>
+              <input type="tel" id="phone" placeholder="888.888.8888" class="form-control js-phone">
+              <span class="help-block js-phone-help-block"></span>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-12">
+            <div class="form-group">
+              <input type="submit" value="Update" class="btn btn-default btn-block">
+              <span class="help-block js-update-submit-help-block"></span>
+            </div>
           </div>
         </div>
-        <div class="col-sm-12 col-md-12">
-          <div class="form-group">
-            <input type="submit" value="Update" class="btn btn-default btn-block">
-            <span class="help-block js-update-submit-help-block"></span>
-          </div>
-        </div>
-      </div>
-      <input type="hidden" id="userName" value="${userName}">
-    </form>
+        <input type="hidden" id="userName" value="${userName}">
+      </form>
+    </section>
   `;
 
   // send to view
