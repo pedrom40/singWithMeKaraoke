@@ -32,7 +32,7 @@ router.post('/', jsonParser, (req, res) => {
         return Promise.reject({
           code: 422,
           reason: 'ValidationError',
-          message: 'Title already taken',
+          message: 'The Title you entered for this Song List is already taken.',
           location: 'title'
         });
       }
