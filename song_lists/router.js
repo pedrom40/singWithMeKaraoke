@@ -114,5 +114,12 @@ router.get('/:userId', (req, res) => {
     .catch( err => res.status(500).json({message: 'Internal server error'}) );
 });
 
+// return list by ID with the apiRepr method
+router.get('/id/:id', jsonParser, (req, res) => {
+  return SongList.findById(req.params.id)
+    .then( list => res.json( list.apiRepr()) )
+    .catch( err => res.status(500).json({message: 'Internal server error'}) );
+});
+
 
 module.exports = {router};

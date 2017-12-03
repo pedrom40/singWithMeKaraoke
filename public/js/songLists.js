@@ -146,39 +146,14 @@ function loadSongListsTabs (lists, userId) {
   $('.js-song-list-content').append(tabNavContainer);
 
   // init listeners
-  listenForSongActions();
-
-}
-
-// returns all song lists by user ID
-function getSongLists (userId) {
-  const settings = {
-    url: `/api/songLists/${userId}`,
-    method: 'GET'
-  }
-  return $.ajax(settings);
-}
-
-// if no lists yet, this adds the create list interface
-function loadAddSongListForm (userId) {
-
-  // start fresh
-  $('.js-song-list-content').empty();
-
-  const template = addSongFormMarkup(userId);
-
-  // send to view
-  $('.js-song-list-content').append(template);
-
-  // init listeners
-  listenForSongActions();
+  listenForSongActions(userId);
 
 }
 
 // create song list form HTML
 function addSongFormMarkup (userId) {
   const template = `
-    <form class="js-add-song-list-form">
+    <form class="js-song-list-form">
       <div class="row">
         <div class="col-sm-12 col-md-12">
           <div class="js-notification hidden"></div>
@@ -212,7 +187,7 @@ function addSongFormMarkup (userId) {
       <div class="row">
         <div class="col-sm-12 col-md-12">
           <div class="form-group">
-            <input type="submit" id="songListSubmit" value="Save Song List" class="btn btn-default btn-block">
+            <input type="submit" id="songListSubmit" value="Add Song List" class="btn btn-default btn-block">
             <span class="help-block js-song-submit-help-block"></span>
           </div>
         </div>
@@ -226,17 +201,154 @@ function addSongFormMarkup (userId) {
   return template;
 }
 
+// if no lists yet, this adds the create list interface
+function loadAddSongListForm (userId) {
+
+  // start fresh
+  $('.js-song-list-content').empty();
+
+  const template = addSongFormMarkup(userId);
+
+  // send to view
+  $('.js-song-list-content').append(template);
+
+  // init listeners
+  listenForSongActions(userId);
+
+}
+
+// loads edit song list form with values
+function loadEditSongListForm (listId, userId) {
+
+  getSongList(listId)
+    .then( list => {
+
+      // start fresh
+      $('.js-song-list-content').empty();
+
+      // loop over songs array
+      let songRows = '';
+      list.songs.map( (song, i) => {
+
+        // fix 0 based index
+        i = i + 1;
+
+        // markup rows
+        songRows = `${songRows}
+          <tr id="songRow_${i}">
+            <td>
+              <label for="songTitle_${i}" class="sr-only">Song Title:</label>
+              <input type="text" id="songTitle_${i}" name="songTitle" value="${song.songTitle}" class="form-control js-song-title">
+            </td>
+            <td>
+              <label for="songArtist_${i}" class="sr-only">Song Artist:</label>
+              <input type="text" id="songArtist_${i}" name="songArtist" value="${song.songArtist}" class="form-control">
+            </td>
+            <td>
+              <a id="clearSong_${i}" class="btn btn-default">
+                <span id="clearSongIcon_${i}" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+              </a>
+            </td>
+          </tr>
+        `;
+
+      });
+
+      // get next song index
+      const nextRowIndex = Number(list.songs.length) + 1;
+
+      // markup form
+      const template = `
+        <form class="js-song-list-form">
+          <div class="row">
+            <div class="col-sm-12 col-md-12">
+              <div class="js-notification hidden"></div>
+              <div class="form-group">
+                <label for="songListTitle">Song List Title:</label>
+                <input type="text" id="songListTitle" value="${list.title}" required class="form-control">
+                <span class="help-block js-song-list-title-help-block"></span>
+              </div>
+            </div>
+          </div>
+          <table class="table table-striped js-song-list-table">
+            <thead>
+              <tr>
+                <th>Songs</th>
+                <th>Artists</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${songRows}
+              <tr>
+                <td>
+                  <label for="songTitle_${nextRowIndex}" class="sr-only">Song Title:</label>
+                  <input type="text" id="songTitle_${nextRowIndex}" name="songTitle" placeholder="New Song Title" class="form-control js-song-title">
+                </td>
+                <td>
+                  <label for="songArtist_${nextRowIndex}" class="sr-only">Song Artist:</label>
+                  <input type="text" id="songArtist_${nextRowIndex}" name="songArtist" placeholder="New Song Artist" class="form-control">
+                </td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6">
+              <div class="form-group">
+                <input type="submit" id="songListSubmit" value="Edit Song List" class="btn btn-default btn-block">
+              </div>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6">
+              <div class="form-group">
+                <input type="button" id="cancelBtn" value="Cancel" class="btn btn-default btn-block">
+              </div>
+            </div>
+          </div>
+
+          <input type="hidden" id="userId" value="${userId}">
+          <input type="hidden" id="listId" value="${list.id}">
+          <input type="hidden" id="songCounter" value="${nextRowIndex}">
+        </form>
+      `;
+
+      // send to view
+      $('.js-song-list-content').append(template);
+
+      // init listeners
+      listenForSongActions(userId);
+
+    });
+
+}
+
 // listener that presides over the song list component
-function listenForSongActions () {
+function listenForSongActions (userId) {
 
   // add new input events
-  $('.js-add-song-list-form')
+  $('.js-song-list-form')
     .click( event => {
       event.preventDefault();
 
-      // if submitting form
-      if (event.target.id === 'songListSubmit') {
+      // if adding song list
+      if (event.target.id === 'songListSubmit' && event.target.value === 'Add Song List') {
         handleSongListAddFormSubmit();
+      }
+
+      // if editing song list
+      else if (event.target.id === 'songListSubmit' && event.target.value === 'Edit Song List') {
+        handleSongListEditFormSubmit();
+      }
+
+      // if cancelling edit
+      else if (event.target.id === 'cancelBtn') {
+        songListComponent($('#userId').val(), false);
+      }
+
+      // if clearing a song
+      else if (event.target.id.search('clearSong') !== -1) {
+        const songIndex = event.target.id.split('_');
+        clearSongInputs(songIndex[1]);
       }
 
       // if clicking into an input
@@ -264,7 +376,7 @@ function listenForSongActions () {
       const listId = event.target.id.split('_');
 
       // init update
-      loadEditSongListForm(listId[1]);
+      loadEditSongListForm(listId[1], userId);
 
     });
 
@@ -281,11 +393,6 @@ function listenForSongActions () {
 
     });
 
-}
-
-// loads edit song list form with values
-function loadEditSongListForm (listId) {
-  console.log(`edit ${listId}`);
 }
 
 // loads edit song list form with values
@@ -362,6 +469,13 @@ function addNewSongInput (inputId) {
 
 }
 
+// clears a song's input values to "delete" the song
+function clearSongInputs (songIndex) {
+  $(`#songTitle_${songIndex}`).val('');
+  $(`#songArtist_${songIndex}`).val('');
+  $(`#songRow_${songIndex}`).hide();
+}
+
 // handles the create song list form submissions
 function handleSongListAddFormSubmit () {
 
@@ -425,6 +539,70 @@ function handleSongListAddFormSubmit () {
 
 }
 
+// handles song list edit form submissions
+function handleSongListEditFormSubmit () {
+
+  // check for a song list title
+  if ($('#songListTitle').val() !== '') {
+
+    // build songs array of objects
+    const numOfLoops = $('#songCounter').val();
+    let songsArray = []
+
+    // loop thru each song
+    for (let i=1; i < numOfLoops; i++) {
+
+      // make sure it's not an empty field
+      if ($(`#songTitle_${i}`).val() !== '') {
+
+        // song title / artist
+        const songObj = {
+          songTitle: $(`#songTitle_${i}`).val(),
+          songArtist: $(`#songArtist_${i}`).val()
+        }
+
+        // add to songs array
+        songsArray.push(songObj);
+
+      }
+
+    }
+
+    // create main song list object
+    const data = {
+      id: $('#listId').val(),
+      title: $('#songListTitle').val(),
+      songs: songsArray
+    }
+
+    // post to create api endpoint
+    editSongList(data)
+      .then(res => songListComponent($('#userId').val(), false))
+      .fail(err => {
+        const msg = {
+          type: 'error',
+          content: err.responseJSON.message
+        }
+        showMsg(msg);
+      });
+
+  }
+
+  // if song list title blank
+  else {
+
+    // send alert to user
+    const msg = {
+      type: 'error',
+      content: 'Please enter a Song List Title'
+    }
+    showMsg(msg);
+
+  }
+
+}
+
+
 // create song post to API
 function createSongList (data) {
 
@@ -434,6 +612,42 @@ function createSongList (data) {
     contentType: 'application/json',
     dataType: 'json',
     data: JSON.stringify(data)
+  }
+
+  return $.ajax(settings);
+
+}
+
+// edit song post to API
+function editSongList (data) {
+
+  const settings = {
+    url: `/api/songLists/${data.id}`,
+    type: 'PUT',
+    contentType: 'application/json',
+    dataType: 'json',
+    data: JSON.stringify(data)
+  }
+
+  return $.ajax(settings);
+
+}
+
+// returns all song lists by user ID
+function getSongLists (userId) {
+  const settings = {
+    url: `/api/songLists/${userId}`,
+    method: 'GET'
+  }
+  return $.ajax(settings);
+}
+
+// get song list
+function getSongList (listId) {
+
+  const settings = {
+    url: `/api/songLists/id/${listId}`,
+    type: 'GET'
   }
 
   return $.ajax(settings);
