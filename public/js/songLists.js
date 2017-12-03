@@ -169,10 +169,11 @@ function addSongFormMarkup (userId) {
           <tr>
             <th>Songs</th>
             <th>Artists</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
+          <tr id="songRow_1">
             <td>
               <label for="songTitle_1" class="sr-only">Song Title:</label>
               <input type="text" id="songTitle_1" name="songTitle" placeholder="Imagine" class="form-control js-song-title">
@@ -181,14 +182,23 @@ function addSongFormMarkup (userId) {
               <label for="songArtist_1" class="sr-only">Song Artist:</label>
               <input type="text" id="songArtist_1" name="songArtist" placeholder="John Lennon" class="form-control">
             </td>
+            <td>
+              <a id="clearSong_1" class="btn btn-default">
+                <span id="clearSongIcon_1" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+              </a>
+            </td>
           </tr>
         </tbody>
       </table>
       <div class="row">
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-6 col-sm-6 col-md-6">
           <div class="form-group">
             <input type="submit" id="songListSubmit" value="Add Song List" class="btn btn-default btn-block">
-            <span class="help-block js-song-submit-help-block"></span>
+          </div>
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-6">
+          <div class="form-group">
+            <input type="button" id="cancelBtn" value="Cancel" class="btn btn-warning btn-block">
           </div>
         </div>
       </div>
@@ -280,7 +290,7 @@ function loadEditSongListForm (listId, userId) {
             </thead>
             <tbody>
               ${songRows}
-              <tr>
+              <tr id="songRow_${nextRowIndex}">
                 <td>
                   <label for="songTitle_${nextRowIndex}" class="sr-only">Song Title:</label>
                   <input type="text" id="songTitle_${nextRowIndex}" name="songTitle" placeholder="New Song Title" class="form-control js-song-title">
@@ -289,19 +299,23 @@ function loadEditSongListForm (listId, userId) {
                   <label for="songArtist_${nextRowIndex}" class="sr-only">Song Artist:</label>
                   <input type="text" id="songArtist_${nextRowIndex}" name="songArtist" placeholder="New Song Artist" class="form-control">
                 </td>
-                <td></td>
+                <td>
+                  <a id="clearSong_${nextRowIndex}" class="btn btn-default">
+                    <span id="clearSongIcon_${nextRowIndex}" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                  </a>
+                </td>
               </tr>
             </tbody>
           </table>
           <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6">
               <div class="form-group">
-                <input type="submit" id="songListSubmit" value="Edit Song List" class="btn btn-default btn-block">
+                <input type="submit" id="songListSubmit" value="Save List" class="btn btn-default btn-block">
               </div>
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6">
               <div class="form-group">
-                <input type="button" id="cancelBtn" value="Cancel" class="btn btn-default btn-block">
+                <input type="button" id="cancelBtn" value="Cancel" class="btn btn-warning btn-block">
               </div>
             </div>
           </div>
@@ -336,7 +350,7 @@ function listenForSongActions (userId) {
       }
 
       // if editing song list
-      else if (event.target.id === 'songListSubmit' && event.target.value === 'Edit Song List') {
+      else if (event.target.id === 'songListSubmit' && event.target.value === 'Save List') {
         handleSongListEditFormSubmit();
       }
 
@@ -395,6 +409,7 @@ function listenForSongActions (userId) {
 
 }
 
+
 // loads edit song list form with values
 function confirmSongListDelete (listId) {
 
@@ -448,7 +463,7 @@ function addNewSongInput (inputId) {
 
       // setup next row
       const template = `
-        <tr>
+        <tr id="songRow_${nextStep}">
           <td>
             <label for="songTitle_${nextStep}" class="sr-only">Song Title:</label>
             <input type="text" id="songTitle_${nextStep}" name="songs[songTitle]" placeholder="Imagine" class="form-control js-song-title">
@@ -456,6 +471,11 @@ function addNewSongInput (inputId) {
           <td>
             <label for="songArtist_${nextStep}" class="sr-only">Song Artist:</label>
             <input type="text" id="songArtist_${nextStep}" name="songs[songArtist]" placeholder="John Lennon" class="form-control js-song-artist">
+          </td>
+          <td>
+            <a id="clearSong_${nextStep}" class="btn btn-default">
+              <span id="clearSongIcon_${nextStep}" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </a>
           </td>
         </tr>
       `;
@@ -475,6 +495,7 @@ function clearSongInputs (songIndex) {
   $(`#songArtist_${songIndex}`).val('');
   $(`#songRow_${songIndex}`).hide();
 }
+
 
 // handles the create song list form submissions
 function handleSongListAddFormSubmit () {
