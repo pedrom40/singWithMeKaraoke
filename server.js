@@ -7,10 +7,14 @@ const morgan = require('morgan');
 const passport = require('passport');
 const ejs = require('ejs');
 
-// setup routers
+// setup api routers
 const {router: usersRouter} = require('./users/router');
 const {router: authRouter, basicStrategy, jwtStrategy} = require('./auth');
 const {router: songListRouter} = require('./song_lists/router');
+const {router: showLocationsRouter} = require('./showLocations/router');
+const {router: showDatesRouter} = require('./showDates/router');
+
+// setup user routers
 const {router: hostsRouter} = require('./hosts/router');
 const {router: singersRouter} = require('./singers/router');
 
@@ -47,7 +51,8 @@ app.use(express.static('public'));
 app.use('/api/users/', usersRouter);
 app.use('/api/auth/', authRouter);
 app.use('/api/songLists/', songListRouter);
-
+app.use('/api/showLocations/', showLocationsRouter);
+app.use('/api/showDates/', showDatesRouter);
 app.use('/singers/', singersRouter);
 app.use('/hosts/', hostsRouter);
 

@@ -1,5 +1,6 @@
 docs/
 node_modules/
+.idea/
 .editorconfig
 .env
 .sass-cache/
